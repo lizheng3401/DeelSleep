@@ -1,14 +1,62 @@
-from rest_framework import viewsets,permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import Http404
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
+
 
 from .serializers import DeviceSerializer
 from .models import Device
 from utils.permissions import IsOwnerOrReadOnly
 
+class DeviceList(APIView):
 
-class DeviceViewSet(viewsets.ModelViewSet):
-    queryset = Device.objects.all()
-    serializer_class = DeviceSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    def get(self, request, format=None):
+        devices = Device.objects.all()
+        serializer = DeviceSerializer(devices, many=True)
+        return Response(serializer.data)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    def post(self, request, format=None):
+        serializer = DeviceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class DeviceDetail(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Device.objects.get(pk=pk)
+        except Device.DoesNotExist:
+            return Http404
+
+    def get(self, request, pk, format=None):
+        device = self.get_object(pk)
+        serializer = DeviceSerializer(device)
+
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        device = self.get_object(pk)
+        serializer = DeviceSerializer(device, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        device = self.get_object(pk)
+        device.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['Get'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('users-list', request=request,format=format),
+        'devices': reverse('devices-list', request=request, format=format)
+    })
+
