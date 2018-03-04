@@ -24,12 +24,12 @@ from device.views import DeviceViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'devices',DeviceViewSet)
+router.register(r'devices', DeviceViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls')),
-    url(r'^api-token-auth', views.obtain_auth_token),
+    # url(r'^api-token-auth', views.obtain_auth_token),
     url(r'^login/', obtain_jwt_token),
     url(r'', include(router.urls)),
 ]

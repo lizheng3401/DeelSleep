@@ -6,7 +6,6 @@ from device.models import Device
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     devices = serializers.PrimaryKeyRelatedField(many=True, queryset=Device.objects.all())
-
     password = serializers.CharField(
         style={'input_type': 'password'},
         write_only=True
@@ -18,6 +17,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user.save()
         return user
 
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['password'])
+        instance.save()
+        return instance
+
     class Meta:
         model = User
-        fields = ('username', 'password', 'email', 'devices')
+        fields = ('id', 'username', 'password', 'email', 'devices', 'is_superuser')
