@@ -47,3 +47,5 @@ db.*
 
 # PyBuilder
 target/
+
+migrations/*
