@@ -16,15 +16,17 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from rest_framework import routers
-from rest_framework.authtoken import views
+# from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 
 from account.views import UserViewSet
 from device.views import DeviceViewSet
+from sleep.views import SleepViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'devices', DeviceViewSet)
+router.register(r'sleeps', SleepViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
