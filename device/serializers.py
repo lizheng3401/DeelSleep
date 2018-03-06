@@ -4,8 +4,8 @@ from sleep.models import Sleep
 
 
 class DeviceSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
-    sleeps = serializers.HyperlinkedRelatedField(many=True, view_name="sleep-detail", read_only=True)
+    owner = serializers.ReadOnlyField(source="owner.username")
+    sleeps = serializers.PrimaryKeyRelatedField(many=True, queryset=Sleep.objects.all())
 
     class Meta:
         model = Device

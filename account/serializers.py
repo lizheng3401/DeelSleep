@@ -1,11 +1,13 @@
 from rest_framework import serializers
 
 from .models import User
+from device.models import Device
+from sleep.models import Sleep
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    devices = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='device-detail')
-    sleeps = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='sleep-detail')
+    devices = serializers.PrimaryKeyRelatedField(many=True, queryset=Device.objects.all())
+    sleeps = serializers.PrimaryKeyRelatedField(many=True, queryset=Sleep.objects.all())
 
     password = serializers.CharField(
         style={'input_type': 'password'},

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'account',
     'device',
     'sleep',
+    'api'
 ]
 
 MIDDLEWARE = [

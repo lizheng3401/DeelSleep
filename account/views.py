@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_jwt.serializers import jwt_encode_handler,jwt_payload_handler
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from django_filters.rest_framework import DjangoFilterBackend
+
 from .models import User
 from .serializers import UserSerializer
 from utils.permissions import IsAdminOrUpdateSelf
@@ -15,6 +17,8 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('username', 'id')
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

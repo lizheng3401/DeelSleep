@@ -1,14 +1,25 @@
 from rest_framework import serializers
+
 from device.models import Device
 from account.models import User
-from .models import Sleep
+from .models import Sleep, Report
 
 
 class SleepSerializer(serializers.HyperlinkedModelSerializer):
 
-    user = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
+    user = serializers.ReadOnlyField(source="user.username")
+    device = serializers.PrimaryKeyRelatedField(queryset=Device.objects.all())
 
     class Meta:
         model = Sleep
+        fields = "__all__"
+
+
+class ReportSerializer(serializers.HyperlinkedModelSerializer):
+    sleep = serializers.PrimaryKeyRelatedField(many=True, queryset=Sleep.objects.all())
+    user = serializers.ReadOnlyField(source="user.username")
+
+    class Meta:
+        model = Report
         fields = "__all__"
 

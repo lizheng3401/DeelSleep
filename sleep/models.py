@@ -4,7 +4,7 @@ from device.models import Device
 
 
 class Sleep(models.Model):
-    time_stamp = models.DateTimeField(auto_now_add=True)
+    time_stamp = models.DateField(auto_now_add=True)
 
     score = models.DecimalField(max_digits=3, decimal_places=1)
     move = models.IntegerField()
@@ -22,7 +22,7 @@ class Sleep(models.Model):
     device = models.ForeignKey(Device, related_name='sleeps')
 
     def __str__(self):
-        return "sad"
+        return self.time_stamp.day
 
     class Meta:
         ordering = ("time_stamp", )
@@ -37,3 +37,6 @@ class Report(models.Model):
 
     def __str__(self):
         return self.user
+
+    class Meta:
+        ordering = ('-created_time', )
