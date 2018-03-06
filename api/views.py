@@ -4,14 +4,12 @@ import csv
 from rest_framework.views import APIView
 from django.http import Http404
 from django.http import JsonResponse
-from rest_framework.response import Response
 
 from sleep.models import Sleep
-from DS.settings import MEDIA_ROOT, BASE_DIR
 
-# Create your views here.
 
 class SleepData(APIView):
+
     def get_object(self, pk):
         try:
             return Sleep.objects.get(pk=pk)
@@ -26,15 +24,14 @@ class SleepData(APIView):
 
     def get(self, request, pk, format=None):
         sleepData = self.get_object(pk=pk)
-        url = BASE_DIR + os.path.join(MEDIA_ROOT, sleepData.data.url)
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        url = BASE_DIR + str(sleepData.data.url).replace("/","\\")
         resp = {}
         with open(url, "r") as csvfile:
             reader = csv.reader(csvfile)
-            i = 0
             for line in reader:
-                if i == 0:
-                    key = line
-                else:
-                    resp[key[i - 1]] = self.str2float(line)
-                i += 1
+                resp.setdefault("time", []).append(float(line[0]))
+                resp.setdefault("heart", []).append(float(line[1]))
+                resp.setdefault("breath", []).append(float(line[2]))
+
         return JsonResponse(resp, safe=False)

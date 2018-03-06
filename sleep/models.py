@@ -22,7 +22,7 @@ class Sleep(models.Model):
     device = models.ForeignKey(Device, related_name='sleeps')
 
     def __str__(self):
-        return self.time_stamp.day
+        return self.time_stamp
 
     class Meta:
         ordering = ("time_stamp", )
