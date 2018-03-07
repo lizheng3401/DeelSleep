@@ -1,4 +1,4 @@
-import os
+import platform
 import csv
 
 from rest_framework.views import APIView
@@ -24,8 +24,7 @@ class SleepData(APIView):
 
     def get(self, request, pk, format=None):
         sleepData = self.get_object(pk=pk)
-        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        url = BASE_DIR + str(sleepData.data.url).replace("/","\\")
+        url = "./" + str(sleepData.data.url) if platform.system() == "Linux" else ".\\"+str(sleepData.data.url).replace("/", "\\")
         resp = {}
         with open(url, "r") as csvfile:
             reader = csv.reader(csvfile)

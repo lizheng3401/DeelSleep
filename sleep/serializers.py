@@ -16,7 +16,7 @@ class SleepSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReportSerializer(serializers.HyperlinkedModelSerializer):
-    sleep = serializers.PrimaryKeyRelatedField(many=True, queryset=Sleep.objects.all())
+    sleep = serializers.PrimaryKeyRelatedField(queryset=Sleep.objects.all())
     user = serializers.ReadOnlyField(source="user.username")
 
     class Meta:

@@ -49,4 +49,4 @@ db.*
 target/
 
 /migrations/*
-/media/*
+media/*
