@@ -22,4 +22,3 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Report
         fields = "__all__"
-

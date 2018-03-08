@@ -24,12 +24,14 @@ from .settings import MEDIA_ROOT
 from account.views import UserViewSet
 from device.views import DeviceViewSet
 from sleep.views import SleepViewSet,ReportViewSet
+from api.views import SleepRecordViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'devices', DeviceViewSet)
 router.register(r'sleeps', SleepViewSet)
 router.register(r'reports', ReportViewSet)
+router.register(r'sleepRecords', SleepRecordViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

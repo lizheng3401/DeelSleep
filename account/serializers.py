@@ -4,7 +4,6 @@ from .models import User
 from device.models import Device
 from sleep.models import Sleep
 
-
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     devices = serializers.PrimaryKeyRelatedField(many=True, queryset=Device.objects.all())
     sleeps = serializers.PrimaryKeyRelatedField(many=True, queryset=Sleep.objects.all())

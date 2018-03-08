@@ -1,11 +1,15 @@
 import platform
 import csv
 
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from django.http import Http404
 from django.http import JsonResponse
+from django_filters.rest_framework import DjangoFilterBackend
 
 from sleep.models import Sleep
+from .models import SleepRecord
+from .serializers import SleepRecordSerializer
 
 
 class SleepData(APIView):
@@ -34,3 +38,10 @@ class SleepData(APIView):
                 resp.setdefault("breath", []).append(float(line[2]))
 
         return JsonResponse(resp, safe=False)
+
+
+class SleepRecordViewSet(viewsets.ModelViewSet):
+    queryset = SleepRecord.objects.all()
+    serializer_class = SleepRecordSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('time', 'user', 'device', 'sleep', 'createdTime')
